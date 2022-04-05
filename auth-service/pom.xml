@@ -12,7 +12,7 @@
 
 	<groupId>com.qwertcardo</groupId>
 	<artifactId>auth-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>auth-service</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -35,6 +35,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.qwertcardo</groupId>
+			<artifactId>base-domain</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

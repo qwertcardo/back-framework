@@ -13,5 +13,6 @@
 		<module>eureka-server</module>
 		<module>gateway-service</module>
 		<module>auth-service</module>
+		<module>base-domain</module>
 	</modules>
 </project>
