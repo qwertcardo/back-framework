@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class AuthController {
 
-    @GetMapping
+    @GetMapping(value = "/test")
     public ResponseEntity<String> get() {
         return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("Return with I Am A TEAPOT");
     }

@@ -5,6 +5,19 @@ spring:
   application:
     name: auth-service
 
+  datasource:
+    url: jdbc:postgresql://localhost:5433/desafio
+    username: postgres
+    password: postgres
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      - hibernate.format_sql: true
+      - properties.hibernate.dialect: org.hibernate.dialect.PostgreSQL81Dialect
+
 eureka:
   client:
     fetch-registry: true
