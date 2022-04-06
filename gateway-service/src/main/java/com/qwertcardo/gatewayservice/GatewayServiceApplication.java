@@ -11,9 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EntityScan("com.qwertcardo.basedomain.**")
 @ComponentScan("com.qwertcardo.**")
 public class GatewayServiceApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(GatewayServiceApplication.class, args);
 	}
-
 }

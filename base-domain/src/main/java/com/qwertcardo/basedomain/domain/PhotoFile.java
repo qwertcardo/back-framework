@@ -12,26 +12,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usuario")
-public class User {
+@Table(name = "photo_file")
+public class PhotoFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "file_name")
+    private String fileName;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "content")
+    private String content64;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "age")
-    private Long age;
-
-    @Column(name = "email")
-    private String email;
-
+    @ManyToOne
+    @JoinColumn(name = "publication_id", foreignKey = @ForeignKey(name = "photo_file_publication_fk"))
+    private Publication publication;
 }
