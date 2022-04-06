@@ -1,12 +1,16 @@
 server:
   port: 8081
 
+jwt:
+  secret: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY0OTIwNDczNiwiaWF0IjoxNjQ5MjA0NzM2fQ.GwRh0jIeWx-2eRk8AHncjgowjjQcz7NLxgEe02npYlA
+  expiration: 36000000
+
 spring:
   application:
     name: auth-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/desafio
+    url: jdbc:postgresql://localhost:5432/desafio
     username: postgres
     password: postgres
 

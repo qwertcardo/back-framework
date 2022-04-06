@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Configuration
 @EnableJpaAuditing
-@ComponentScan(basePackages = "com.qwertcardo")
+@ComponentScan(basePackages = "com.qwertcardo.basedomain.**")
 public class BaseDomainApplication {
 }

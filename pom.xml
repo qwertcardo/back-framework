@@ -14,5 +14,6 @@
 		<module>gateway-service</module>
 		<module>auth-service</module>
 		<module>base-domain</module>
+		<module>user-service</module>
 	</modules>
 </project>

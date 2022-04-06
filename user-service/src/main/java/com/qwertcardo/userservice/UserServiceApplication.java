@@ -1,4 +1,4 @@
-package com.qwertcardo.authservice;
+package com.qwertcardo.userservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,10 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableEurekaClient
 @EntityScan("com.qwertcardo.basedomain.**")
 @ComponentScan("com.qwertcardo.**")
-public class AuthServiceApplication {
-
+public class UserServiceApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(AuthServiceApplication.class, args);
+		SpringApplication.run(UserServiceApplication.class, args);
 	}
 
 	@Bean
