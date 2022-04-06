@@ -12,26 +12,18 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usuario")
-public class User {
+@Table(name = "publication_like")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "age")
-    private Long age;
-
-    @Column(name = "email")
-    private String email;
-
+    @ManyToOne
+    @JoinColumn(name = "publication", foreignKey = @ForeignKey(name = "like_publication_fk"))
+    private Publication publication;
 }

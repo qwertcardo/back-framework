@@ -15,5 +15,7 @@
 		<module>auth-service</module>
 		<module>base-domain</module>
 		<module>user-service</module>
+		<module>producer-service</module>
+		<module>consumer-service</module>
 	</modules>
 </project>

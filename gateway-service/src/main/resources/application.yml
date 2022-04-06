@@ -26,6 +26,20 @@ spring:
           filters:
             - Authentication
             - RewritePath=/user(?<segment>/?.*), $\{segment}
+        - id: producer-service
+          uri: lb://PRODUCER-SERVICE
+          predicates:
+            - Path=/producer/**
+          filters:
+            - Authentication
+            - RewritePath=/producer(?<segment>/?.*), $\{segment}
+        - id: consumer-service
+          uri: lb://CONSUMER-SERVICE
+          predicates:
+            - Path=/consumer/**
+          filters:
+            - Authentication
+            - RewritePath=/consumer(?<segment>/?.*), $\{segment}
 
   datasource:
     url: jdbc:postgresql://localhost:5432/desafio
