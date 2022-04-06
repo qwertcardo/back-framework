@@ -1,17 +1,26 @@
 package com.qwertcardo.authservice.controllers;
 
+import com.qwertcardo.authservice.services.AuthService;
+import com.qwertcardo.basedomain.security.AuthRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/test")
+@RequestMapping(value = "/auth")
 public class AuthController {
 
-    @GetMapping
-    public ResponseEntity<String> get() {
-        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("Return with I Am A TEAPOT");
+    @Autowired
+    private AuthService authService;
+
+    @PostMapping(value = "/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(this.authService.authenticate(authRequest));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
