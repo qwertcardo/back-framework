@@ -23,6 +23,9 @@ public class Publication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "content")
     private String content;
 
@@ -32,7 +35,7 @@ public class Publication {
     @Enumerated(EnumType.ORDINAL)
     private PublicationTypeEnum type;
 
-    @OneToMany(mappedBy = "publication")
+    @OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"publication"})
     private List<PhotoFile> files;
 

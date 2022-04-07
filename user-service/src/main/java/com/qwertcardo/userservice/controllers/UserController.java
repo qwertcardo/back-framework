@@ -14,9 +14,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.status(HttpStatus.OK).body("se me viu tem token");
+    @GetMapping(value = "/id/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(this.userService.findById(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @GetMapping(value = "/find/{username}")

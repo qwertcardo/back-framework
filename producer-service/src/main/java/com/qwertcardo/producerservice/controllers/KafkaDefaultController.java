@@ -5,10 +5,7 @@ import com.qwertcardo.producerservice.services.KafkaDefaultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
@@ -28,7 +25,7 @@ public class KafkaDefaultController {
         }
     }
 
-    @PostMapping(value = "/delete/publication")
+    @DeleteMapping(value = "/delete/publication")
     public ResponseEntity<?> deletePublication(@RequestBody Publication publication) {
         try {
             this.kafkaDefaultService.deletePublication(publication);
@@ -50,7 +47,7 @@ public class KafkaDefaultController {
         }
     }
 
-    @PostMapping(value = "/delete/comment")
+    @DeleteMapping(value = "/delete/comment")
     public ResponseEntity<?> deleteComment(@RequestBody Publication publication) {
         try {
             this.kafkaDefaultService.deleteComment(publication);
@@ -72,7 +69,7 @@ public class KafkaDefaultController {
         }
     }
 
-    @PostMapping(value = "/delete/like")
+    @DeleteMapping(value = "/delete/like")
     public ResponseEntity<?> dislikePublication(@RequestBody Publication publication) {
         try {
             this.kafkaDefaultService.dislikePublication(publication);
@@ -83,7 +80,7 @@ public class KafkaDefaultController {
         }
     }
 
-    @PostMapping(value = "/visualisation")
+    @PostMapping(value = "/visualization")
     public ResponseEntity<?> visualisePublication(@RequestBody Publication publication) {
         try {
             this.kafkaDefaultService.visualisePublication(publication);

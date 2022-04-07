@@ -21,9 +21,7 @@ public class PhotoFileService {
         });
     }
 
-    public void deletePhotoFiles(List<PhotoFile> photoFiles) {
-        photoFiles.forEach(file -> {
-            this.photoFileRepository.deleteById(file.getId());
-        });
+    public void deletePhotoFilesByPublicationId(Long id) {
+        this.photoFileRepository.deletePhotoFilesByPublicationId(id);
     }
 }

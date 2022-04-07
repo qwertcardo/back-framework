@@ -24,6 +24,11 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public User findById(Long id) throws Exception {
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new Exception("User not found!"));
+    }
+
     public User findByUsername(String username) throws Exception {
         return this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new Exception("User not found!"));

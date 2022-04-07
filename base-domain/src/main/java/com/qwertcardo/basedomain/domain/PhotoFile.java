@@ -25,6 +25,9 @@ public class PhotoFile {
     @Column(name = "content")
     private String content64;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "publication_id", foreignKey = @ForeignKey(name = "photo_file_publication_fk"))
     private Publication publication;

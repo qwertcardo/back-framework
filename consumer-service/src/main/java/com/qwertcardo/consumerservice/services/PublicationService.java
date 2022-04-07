@@ -6,26 +6,31 @@ import com.qwertcardo.basedomain.domain.enums.PublicationTypeEnum;
 import com.qwertcardo.basedomain.kafka.KafkaMessage;
 import com.qwertcardo.consumerservice.repositories.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
+@Transactional
 public class PublicationService {
     private static final Long INITIAL_VIZUALIZATIONS = 0L;
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired
     private PublicationRepository publicationRepository;
 
     @Autowired
     private PhotoFileService photoFileService;
+
+    @Autowired
+    private LikeService likeService;
 
     // METHODS FROM KAFKA
 
@@ -47,11 +52,26 @@ public class PublicationService {
     }
 
     public void delete(KafkaMessage<Publication> kafkaMessage) {
-        List<PhotoFile> photoFiles = kafkaMessage.getEntity().getFiles();
-        this.photoFileService.deletePhotoFiles(photoFiles);
+        Optional<Publication> optional = this.publicationRepository.findById(kafkaMessage.getEntity().getId());
+        if (optional.isPresent()) {
+            Publication publication = optional.get();
 
-        Publication publication = kafkaMessage.getEntity();
-        this.publicationRepository.deleteById(publication.getId());
+            this.photoFileService.deletePhotoFilesByPublicationId(publication.getId());
+            deleteCommentsByMainPublicationId(publication.getId());
+            this.publicationRepository.deleteById(publication.getId());
+        }
+    }
+
+    private void deleteCommentsByMainPublicationId(Long id) {
+        Optional<Publication> optional = this.publicationRepository.findById(id);
+        if (optional.isPresent()) {
+            Publication publication = optional.get();
+
+            for (Publication comment : publication.getComments()) {
+                this.likeService.deleteLikesFromPublicationId(comment.getId());
+                this.publicationRepository.deleteById(comment.getId());
+            }
+        }
     }
 
     public void publishComment(KafkaMessage<Publication> kafkaMessage) {
@@ -60,6 +80,7 @@ public class PublicationService {
             Publication comment = kafkaMessage.getEntity();
             comment.setVisualizations(null);
             comment.setType(PublicationTypeEnum.COMMENT);
+            comment.setTitle(null);
             comment.setComments(Collections.EMPTY_LIST);
             comment.setFiles(Collections.EMPTY_LIST);
             comment.setLikes(Collections.EMPTY_LIST);
@@ -71,14 +92,22 @@ public class PublicationService {
     }
 
     public void deleteComment(KafkaMessage<Publication> kafkaMessage) {
-        Publication comment = kafkaMessage.getEntity();
-        this.publicationRepository.deleteById(comment.getId());
+        Optional<Publication> optional = this.publicationRepository.findById(kafkaMessage.getEntity().getId());
+        if (optional.isPresent()) {
+            Publication comment = optional.get();
+
+            this.likeService.deleteLikesFromPublicationId(comment.getId());
+            this.publicationRepository.deleteById(comment.getId());
+        }
     }
 
     public void visualize(KafkaMessage<Publication> kafkaMessage) {
         Optional<Publication> publication = this.publicationRepository.findById(kafkaMessage.getEntity().getId());
         if (publication.isPresent()) {
-            this.publicationRepository.deleteById(publication.get().getId());
+            Publication ref = publication.get();
+            ref.setVisualizations(ref.getVisualizations() + 1);
+
+            this.publicationRepository.save(ref);
         }
     }
 
@@ -86,5 +115,32 @@ public class PublicationService {
 
     public List<Publication> findAll() {
         return this.publicationRepository.findAll();
+    }
+
+    public Optional<Publication> findById(Long id) {
+        return this.publicationRepository.findById(id);
+    }
+
+    public Publication findByIdWithThrows(Long id) throws Exception {
+        return this.publicationRepository.findById(id)
+                .orElseThrow(() -> new Exception("Publication not Found for id" + id));
+    }
+
+    public Page<Publication> findAllPageable(Map<String, String> params) {
+        int pageNumber = Integer.parseInt(params.getOrDefault("page", "0"));
+        int pageSize = Integer.parseInt(params.getOrDefault("size", "10"));
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        Specification<Publication> specifications = Specification
+                .where(new Specification<Publication>() {
+                    @Override
+                    public Predicate toPredicate(Root<Publication> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+
+                        return criteriaBuilder.equal(root.get("type"), PublicationTypeEnum.valueOf(params.get("type")));
+                    }
+                });
+
+        return this.publicationRepository.findAll(specifications, pageRequest);
     }
 }

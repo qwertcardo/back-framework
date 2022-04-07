@@ -48,6 +48,7 @@ public class KafkaDefaultService {
     public SendResult<String, String> likePublication(Publication publication) throws Exception {
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("action", "publish");
+        properties.put("user", publication.getCreator().getId());
 
         return this.kafkaProducer.send(KafkaTopicConstants.LIKE_TOPIC, publication, properties);
     }
@@ -55,6 +56,7 @@ public class KafkaDefaultService {
     public SendResult<String, String> dislikePublication(Publication publication) throws Exception {
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("action", "delete");
+        properties.put("user", publication.getCreator().getId());
 
         return this.kafkaProducer.send(KafkaTopicConstants.LIKE_TOPIC, publication, properties);
     }

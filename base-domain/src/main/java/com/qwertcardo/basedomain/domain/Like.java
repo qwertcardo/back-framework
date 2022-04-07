@@ -24,6 +24,6 @@ public class Like {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "publication", foreignKey = @ForeignKey(name = "like_publication_fk"))
+    @JoinColumn(name = "publication_id", foreignKey = @ForeignKey(name = "like_publication_fk"))
     private Publication publication;
 }
