@@ -1,5 +1,6 @@
 package com.qwertcardo.consumerservice.controllers;
 
+import com.qwertcardo.basedomain.domain.PhotoFile;
 import com.qwertcardo.basedomain.domain.Publication;
 import com.qwertcardo.consumerservice.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -132,15 +132,22 @@ public class PublicationService {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-        Specification<Publication> specifications = Specification
-                .where(new Specification<Publication>() {
+        Specification<Publication> specifications =
+                Specification.where(new Specification<Publication>() {
                     @Override
                     public Predicate toPredicate(Root<Publication> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
                         return criteriaBuilder.equal(root.get("type"), PublicationTypeEnum.valueOf(params.get("type")));
                     }
-                });
+                })
+                .and(params.containsKey("main") ? new Specification<Publication>() {
+                    @Override
+                    public Predicate toPredicate(Root<Publication> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                        return criteriaBuilder.equal(root.get("reference").get("id"), Long.parseLong(params.get("main")));
+                    }
+                } : null);
 
         return this.publicationRepository.findAll(specifications, pageRequest);
     }
+
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -23,7 +24,8 @@ public class PhotoFile {
     private String fileName;
 
     @Column(name = "content")
-    private String content64;
+    @Type(type="org.hibernate.type.BinaryType")
+    private byte[] content64;
 
     @Column(name = "description")
     private String description;
